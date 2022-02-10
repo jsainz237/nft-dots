@@ -4,7 +4,7 @@ import { HomeSection } from '../components/HomeSection'
 const Home: NextPage = () => {
   return (
     <>
-      <HomeSection color='#EDDEA4' />
+      <HomeSection color='#F6BDD1' />
     </>
   )
 }

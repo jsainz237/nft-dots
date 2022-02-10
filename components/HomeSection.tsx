@@ -9,6 +9,7 @@ import { Section } from "./Section";
 import LargeDot from '../public/assets/large_dot.svg';
 /** @ts-ignore */
 import DotPlus from '../public/assets/plus.svg';
+import { WalletButton } from "./WalletButton";
 
 
 namespace Styled {
@@ -33,6 +34,7 @@ namespace Styled {
 
     export const Negative = styled.div<Props>`
         position: absolute;
+        pointer-events: none;
         top: 0;
         right: -52%;
         height: 100%;
@@ -76,7 +78,7 @@ namespace Styled {
         background: none;
         border: none;
         cursor: pointer;
-        transition: opacity 0.1s ease;
+        transition: opacity 0.2s ease;
         
         &:hover {
             opacity: 0.7;
@@ -87,7 +89,20 @@ namespace Styled {
         padding: 1rem 6rem;
         background: none;
         border-radius: 50px;
+        color: ${props => props.color};
         border: ${props => `2px solid ${props.color}`};
+        cursor: pointer;
+        font-size: 1.5rem;
+        transition: all 0.2s ease;
+
+        &:hover:not(:disabled) {
+            background: ${props => props.color};
+            color: black;
+        }
+
+        &:disabled {
+            cursor: not-allowed;
+        }
     `;
 
     export const CounterContainer = styled.div`
@@ -130,15 +145,18 @@ export const HomeSection: FC<Props> = ({ color }) => {
     }
 
     const renderHeader = () => (
-        <Styled.Header>
-            <DotPlus
-                color={color}
-                height={homeIconSize}
-                width={homeIconSize}
-            />
-            <Styled.Subtitle color={color}>INFO</Styled.Subtitle>
-            <Styled.Subtitle color={color}>FAQ</Styled.Subtitle>
-        </Styled.Header>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Styled.Header>
+                <DotPlus
+                    color={color}
+                    height={homeIconSize}
+                    width={homeIconSize}
+                />
+                <Styled.Subtitle color={color}>INFO</Styled.Subtitle>
+                <Styled.Subtitle color={color}>FAQ</Styled.Subtitle>
+            </Styled.Header>
+            <WalletButton color={color} />
+        </div>
     );
 
     const renderTitle = () => (
@@ -176,7 +194,7 @@ export const HomeSection: FC<Props> = ({ color }) => {
             </Styled.CounterContainer>
             
             <Styled.MintButton color={color}>
-                <Styled.Subtitle color={color}>Mint</Styled.Subtitle>
+                Mint
             </Styled.MintButton>
         </Styled.ActionWrapper>
     )
