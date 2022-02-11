@@ -39,6 +39,8 @@ namespace Styled {
         position: absolute;
         right: 0;
         top: 110%;
+        display: flex;
+        flex-direction: column;
         background-color: white;
         color: black;
         width: 16rem;
@@ -49,6 +51,10 @@ namespace Styled {
         visibility: ${props => props.visible ? 'visible' : 'hidden'};
 
         & > * {
+            background: none;
+            border: none;
+            font-size: 1rem;
+            text-align: left;
             padding: 0.5rem 1.5rem;
             cursor: pointer;
 
@@ -129,8 +135,7 @@ export const WalletButton: FC<Props> = ({ color }) => {
     const setConnectedAccount = async () => {
         try {
             // @ts-ignore
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            
+            const provider = new ethers.providers.Web3Provider(window.ethereum);            
             const connectedNetwork = await provider.getNetwork();
             if(connectedNetwork.chainId !== 56) {
                 setConnectedToBSC(false);
@@ -148,6 +153,10 @@ export const WalletButton: FC<Props> = ({ color }) => {
         } catch {
             setWalletAddress(undefined);
         }
+    }
+
+    const disconnectWallet = async () => {
+        setWalletAddress(undefined);
     }
 
     const renderMessage = () => {
@@ -184,8 +193,8 @@ export const WalletButton: FC<Props> = ({ color }) => {
                 {walletAddress && <FontAwesomeIcon size="xs" style={{ marginLeft: 8 }} icon={faChevronDown} />}
             </Styled.WalletButton>
             <Styled.Dropdown ref={dropdownRef} visible={showDropdown} color={color}>
-                <div style={{ color: 'red' }}>Disconnect</div>
-                <div>My DOTS</div>
+                <button onClick={disconnectWallet} style={{ color: 'red' }}>Disconnect</button>
+                <button>My DOTS</button>
             </Styled.Dropdown>
         </Styled.Container>
     )
