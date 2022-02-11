@@ -5,6 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWallet, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { ethers } from 'ethers';
 
+import { useAppSelector, useAppDispatch } from '../state/hooks';
+import { selectWallet, setAddress, clearAddress } from '../state/slices/wallet.state';
+
 type Props = { color: string; }
 
 namespace Styled {
@@ -74,10 +77,12 @@ export const WalletButton: FC<Props> = ({ color }) => {
     const dropdownRef = useRef();
     const walletButtonRef = useRef();
 
+    const walletAddress = useAppSelector(selectWallet);
     const [metaMask, setMetaMask] = useState<boolean>();
-    const [walletAddress, setWalletAddress] = useState<string>();
     const [isOnboarding, setIsOnboarding] = useState<boolean>();
     const [connectedToBSC, setConnectedToBSC] = useState<boolean>();
+
+    const dispatch = useAppDispatch();
     
     useEffect(() => {
         async function connect() {
@@ -123,7 +128,7 @@ export const WalletButton: FC<Props> = ({ color }) => {
             const address = accounts[0];
 
             if(address) {
-                setWalletAddress(address);
+                dispatch(setAddress(address));
             } else {
                 throw new Error('Could not get wallet address');
             }
@@ -148,25 +153,25 @@ export const WalletButton: FC<Props> = ({ color }) => {
             const address = await signer.getAddress();
 
             if(address) {
-                setWalletAddress(address);
+                dispatch(setAddress(address));
             }
         } catch {
-            setWalletAddress(undefined);
+            dispatch(setAddress(null));
         }
     }
 
     const disconnectWallet = async () => {
-        setWalletAddress(undefined);
+        dispatch(clearAddress());
     }
 
     const renderMessage = () => {
         return walletAddress
             ? `0x...${walletAddress.slice(-4)}`
-            : !connectedToBSC
+            : metaMask && !connectedToBSC
             ? 'Connect to BSC'
             : isOnboarding
             ? 'Install in progress'
-            : metaMask
+            : metaMask && !walletAddress
             ? 'Connect wallet'
             : 'Install MetaMask';
     }

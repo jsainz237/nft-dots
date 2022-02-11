@@ -4,13 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faMinusCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { Section } from "./Section";
-
-/** @ts-ignore */
-import LargeDot from '../public/assets/large_dot.svg';
-/** @ts-ignore */
-import DotPlus from '../public/assets/plus.svg';
 import { WalletButton } from "./WalletButton";
 
+/** @ts-ignore */
+import LargeDot from '../../public/assets/large_dot.svg';
+/** @ts-ignore */
+import DotPlus from '../../public/assets/plus.svg';
 
 namespace Styled {
     export const SectionContainer = styled(Section)`
