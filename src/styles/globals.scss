@@ -1,3 +1,4 @@
+@import "~bootstrap/scss/bootstrap";
 @import './variables';
 
 html,
@@ -10,6 +11,12 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: $Montserrat;
+}
+
+.section-title {
+  font-size: 4rem;
+  margin: 0;
+  font-weight: bold;
 }
 
 p, a, button, div {
