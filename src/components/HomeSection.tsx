@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faMinusCircle } from '@fortawesome/free-solid-svg-icons';
 
@@ -29,9 +29,7 @@ namespace Styled {
         margin-bottom: 8rem;
     `;
 
-    type Props = { color: string; };
-
-    export const Negative = styled.div<Props>`
+    export const Negative = styled.div`
         position: absolute;
         pointer-events: none;
         top: 0;
@@ -39,18 +37,18 @@ namespace Styled {
         height: 100%;
         width: 100%;
         transform: skewX(40deg);
-        background: ${props => props.color};
+        background: ${props => props.theme.s0};
         mix-blend-mode: difference;
     `;
 
-    export const Title = styled.h1<Props>`
-        color: ${props => props.color};
+    export const Title = styled.h1`
+        color: ${props => props.theme.s0};
         font-size: 10rem;
         margin: 0;
     `;
 
-    export const Subtitle = styled.p<Props>`
-        color: ${props => props.color};
+    export const Subtitle = styled.p`
+        color: ${props => props.theme.s0};
         font-size: 1.5rem;
         margin: 0;
     `;
@@ -84,18 +82,18 @@ namespace Styled {
         }
     `;
 
-    export const MintButton = styled.button<Props>`
+    export const MintButton = styled.button`
         padding: 1rem 6rem;
         background: none;
         border-radius: 50px;
-        color: ${props => props.color};
-        border: ${props => `2px solid ${props.color}`};
+        color: ${props => props.theme.s0};
+        border: ${props => `2px solid ${props.theme.s0}`};
         cursor: pointer;
         font-size: 1.5rem;
         transition: all 0.2s ease;
 
         &:hover:not(:disabled) {
-            background: ${props => props.color};
+            background: ${props => props.theme.s0};
             color: black;
         }
 
@@ -113,20 +111,17 @@ namespace Styled {
         margin-bottom: 1rem;
     `;
 
-    export const Counter = styled.h1<Props>`
+    export const Counter = styled.h1`
         margin: 0;
         font-size: 2.5rem;
-        color: ${props => props.color};
+        color: ${props => props.theme.s0};
     `;
 }
 
-interface Props {
-    color: string;
-}
-
-export const HomeSection: FC<Props> = ({ color }) => {
+export const HomeSection: FC = () => {
     const MINT_LIMIT = 10, MINT_MIN = 1;
     const [count, setCount] = useState<number>(MINT_MIN);
+    const theme: any = useTheme();
 
     const homeIconSize = "2rem";
     const dotSize = "7.5rem";
@@ -147,30 +142,30 @@ export const HomeSection: FC<Props> = ({ color }) => {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Styled.Header>
                 <DotPlus
-                    color={color}
+                    color={theme.s0}
                     height={homeIconSize}
                     width={homeIconSize}
                 />
-                <Styled.Subtitle color={color}>INFO</Styled.Subtitle>
-                <Styled.Subtitle color={color}>FAQ</Styled.Subtitle>
+                <Styled.Subtitle>INFO</Styled.Subtitle>
+                <Styled.Subtitle>FAQ</Styled.Subtitle>
             </Styled.Header>
-            <WalletButton color={color} />
+            <WalletButton/>
         </div>
     );
 
     const renderTitle = () => (
         <Styled.TitleWrapper>
-            <Styled.Title color={color}>D</Styled.Title>
+            <Styled.Title>D</Styled.Title>
             <LargeDot 
                 height={dotSize}
                 width={dotSize}
-                color={color}
+                color={theme.s0}
                 style={{
                     margin: "2rem 0.25rem"
                 }}
             />
-            <Styled.Title color={color}>TS</Styled.Title>
-            <Styled.Subtitle color={color} style={{
+            <Styled.Title>TS</Styled.Title>
+            <Styled.Subtitle style={{
                 marginBottom: '2rem',
                 marginLeft: '0.5rem',
                 fontSize: '2.2rem',
@@ -184,15 +179,15 @@ export const HomeSection: FC<Props> = ({ color }) => {
         <Styled.ActionWrapper>
             <Styled.CounterContainer>
                 <Styled.ActionButton onClick={decrementCounter}>
-                    <FontAwesomeIcon size="2x" color={color} icon={faMinusCircle} />
+                    <FontAwesomeIcon color={theme.s0} size="2x" icon={faMinusCircle} />
                 </Styled.ActionButton>
-                <Styled.Counter color={color}>{count}</Styled.Counter>
+                <Styled.Counter>{count}</Styled.Counter>
                 <Styled.ActionButton onClick={incrementCounter}>
-                    <FontAwesomeIcon size="2x" color={color} icon={faPlusCircle} />
+                    <FontAwesomeIcon color={theme.s0} size="2x" icon={faPlusCircle} />
                 </Styled.ActionButton>
             </Styled.CounterContainer>
             
-            <Styled.MintButton color={color}>
+            <Styled.MintButton>
                 Mint
             </Styled.MintButton>
         </Styled.ActionWrapper>
@@ -200,7 +195,7 @@ export const HomeSection: FC<Props> = ({ color }) => {
 
     return (
         <Styled.SectionContainer>
-            <Styled.Negative color={color} />
+            <Styled.Negative />
             {renderHeader()}
             {renderTitle()}
             {renderMinting()}

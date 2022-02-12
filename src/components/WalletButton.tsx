@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef, useState } from "react";
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import MetaMaskOnboarding from '@metamask/onboarding';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWallet, faChevronDown } from '@fortawesome/free-solid-svg-icons';
@@ -8,16 +8,14 @@ import { ethers } from 'ethers';
 import { useAppSelector, useAppDispatch } from '../state/hooks';
 import { selectWallet, setAddress, clearAddress } from '../state/slices/wallet.state';
 
-type Props = { color: string; }
-
 namespace Styled {
     export const Container = styled.div`
         position: relative;
     `;
 
-    export const WalletButton = styled.button<Props>`
-        border: 2px solid ${props => props.color};
-        color: ${props => props.color};
+    export const WalletButton = styled.button`
+        border: 2px solid ${props => props.theme.s0};
+        color: ${props => props.theme.s0};
         font-size: 1rem;
         padding: 0.25rem 1rem;
         display: flex;
@@ -29,7 +27,7 @@ namespace Styled {
         transition: all 0.2s ease;
 
         &:hover:not(:disabled) {
-            background: ${props => props.color};
+            background: ${props => props.theme.s0};
             color: black;
         }
 
@@ -38,7 +36,7 @@ namespace Styled {
         }
     `;
 
-    export const Dropdown = styled.div<{ color: string, visible?: boolean }>`
+    export const Dropdown = styled.div<{ visible?: boolean }>`
         position: absolute;
         right: 0;
         top: 110%;
@@ -72,7 +70,8 @@ namespace Styled {
     `;
 }
 
-export const WalletButton: FC<Props> = ({ color }) => {
+export const WalletButton: FC = () => {
+    const theme: any = useTheme();
     const [showDropdown, setshowDropdown] = useState<boolean>(false);
     const dropdownRef = useRef();
     const walletButtonRef = useRef();
@@ -189,7 +188,6 @@ export const WalletButton: FC<Props> = ({ color }) => {
         <Styled.Container>
             <Styled.WalletButton
                 ref={walletButtonRef}
-                color={color}
                 disabled={isOnboarding}
                 onClick={onClick}
             >
@@ -197,7 +195,7 @@ export const WalletButton: FC<Props> = ({ color }) => {
                 {renderMessage()}
                 {walletAddress && <FontAwesomeIcon size="xs" style={{ marginLeft: 8 }} icon={faChevronDown} />}
             </Styled.WalletButton>
-            <Styled.Dropdown ref={dropdownRef} visible={showDropdown} color={color}>
+            <Styled.Dropdown ref={dropdownRef} visible={showDropdown}>
                 <button onClick={disconnectWallet} style={{ color: 'red' }}>Disconnect</button>
                 <button>My DOTS</button>
             </Styled.Dropdown>

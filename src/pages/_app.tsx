@@ -2,14 +2,18 @@ import '../styles/globals.scss'
 import type { AppProps } from 'next/app'
 import { config } from '@fortawesome/fontawesome-svg-core'
 import { Provider } from 'react-redux';
+import { ThemeProvider } from 'styled-components';
 import '@fortawesome/fontawesome-svg-core/styles.css'
-config.autoAddCss = false
 import { store } from '../state/store';
+import { getTheme } from '../styles/generate-theme';
+config.autoAddCss = false
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
-      <Component {...pageProps} />
+      <ThemeProvider theme={getTheme(2)}>
+        <Component {...pageProps} />
+      </ThemeProvider>
     </Provider>
   )
 }
