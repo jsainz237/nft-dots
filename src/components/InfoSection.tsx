@@ -6,23 +6,26 @@ import { Section } from './Section';
 import styled, { useTheme } from 'styled-components';
 
 // @ts-ignore
-import DOT from '../../public/assets/rotated-missing-corners.svg';
+import DOT from '../../public/assets/half_rotated_bottom_right.svg';
 
 namespace Styled {
     export const InfoWrapper = styled.div`
         display: flex;
-        justify-content: space-around;
+        justify-content: space-between;
         align-items: flex-end;
     `;
 
     export const ListItemWrapper = styled.div`
         display: flex;
         align-items: center;
-        font-size: 1.5rem;
         margin-top: 0.5rem;
 
         *:first-child {
             margin-right: 1rem;
+        }
+
+        * {
+            font-size: 1.5rem;
         }
     `;
 }
@@ -31,14 +34,16 @@ export const InfoSection: FC = () => {
     const theme: any = useTheme();
     const dotRef = useRef<any>();
 
-    useEffect(() => {
-        window.addEventListener('scroll', () => {
-            if(dotRef.current) {
-                dotRef.current.style.transform = 
-                    `rotate(${window.scrollY / 15}deg)`;
-            }
-        })
-    })
+    const triangleSize = '15rem'
+
+    // useEffect(() => {
+    //     window.addEventListener('scroll', () => {
+    //         if(dotRef.current) {
+    //             dotRef.current.style.transform = 
+    //                 `rotate(${window.scrollY / 15}deg)`;
+    //         }
+    //     })
+    // })
 
     const ListItem = ({ item }: { item: string }) => (
         <Styled.ListItemWrapper>
@@ -58,14 +63,14 @@ export const InfoSection: FC = () => {
     return (
         <Section style={{ background: theme.s1 }} withContainer>
             <Styled.InfoWrapper>
-                <div>
-                    <h1 className='section-title'>Info</h1>
+                <div style={{ marginBottom: '7rem' }}>
+                    <h1 className='section-title'>Info & Specs</h1>
                     <div>
                         {list.map((str, i) => <ListItem key={i} item={str} />)}
                     </div>
                 </div>
                 <div ref={dotRef}>
-                    <DOT color={'black'} height={220} width={220} />
+                    <DOT height={triangleSize} width={triangleSize} />
                 </div>
             </Styled.InfoWrapper>
         </Section>

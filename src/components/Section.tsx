@@ -12,11 +12,12 @@ namespace Styled {
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
     withContainer?: boolean;
+    containerProps?: React.HTMLAttributes<HTMLDivElement>;
 }
 
-export const Section: FC<Props> = ({ withContainer, children, ...props }) => {
+export const Section: FC<Props> = ({ withContainer, containerProps, children, ...props }) => {
     const childrenWithContainer = (
-        <Container>{children}</Container>
+        <Container {...containerProps}>{children}</Container>
     )
 
     return (

@@ -11,7 +11,7 @@ config.autoAddCss = false
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
-      <ThemeProvider theme={getTheme(2)}>
+      <ThemeProvider theme={getTheme(3)}>
         <Component {...pageProps} />
       </ThemeProvider>
     </Provider>

@@ -1,8 +1,8 @@
 const colors = {
     // 'Yale Blue': '#1D4E89', // too dark
-    'Amaranth': '#DA3E52',
+    // 'Amaranth': '#DA3E52',
     'Medium Champagne': '#EDDEA4',
-    'White': '#FFFFFF',
+    // 'White': '#FFFFFF',
     'Orchid Pink': '#F6BDD1',
     'Medium Turquoise': '#40CBC0',
     'Azure': '#3F84E5',
@@ -33,6 +33,9 @@ export function getTheme(sectionsCount: number) {
     colorArr.forEach((color, ind) => {
         theme[`s${ind}`] = color;
     });
+
+    // overrides
+    theme['s1'] = '#FFFFFF';
 
     return theme;
 }
