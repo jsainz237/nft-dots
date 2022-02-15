@@ -41,21 +41,6 @@ export const PreviewSection: FC = () => {
     const sliderRef = useRef<Slider>();
     const [slidesToShow, setSlidesToShow] = useState<number>(3);
 
-    useEffect(() => {
-        window.addEventListener('resize', () => {
-            if(window.innerWidth > 960 && slidesToShow !== 4) {
-                console.log("SETTING TO 4");
-                setSlidesToShow(4);
-                return;
-            }
-            if(window.innerWidth <= 960 && slidesToShow !== 3) {
-                console.log("SETTING TO 3");
-                setSlidesToShow(3);
-                return;
-            }
-        })
-    }, []);
-
     const examples = new Array(12).fill(0).map((_, i) => `ex-${i + 1}`);
     const settings: Settings = {
         infinite: true,
@@ -63,6 +48,15 @@ export const PreviewSection: FC = () => {
         swipeToSlide: true,
         arrows: false,
         dots: false,
+        slidesToShow: 4,
+        responsive: [
+            {
+                breakpoint: 960,
+                settings: {
+                    slidesToShow: 3,
+                }
+            },
+        ]
     }
 
     const scroll = (dir: number) => {
@@ -82,13 +76,15 @@ export const PreviewSection: FC = () => {
                     <Styled.Icon onClick={() => scroll(1)} size='2x' icon={faCircleArrowRight} />
                 </Styled.ButtonWrapper>
             </Styled.TitleContainer>
-            <Slider ref={sliderRef} slidesToShow={slidesToShow} {...settings}>
-                { examples.map(filename => (
-                    <Styled.ExampleContainer>
-                        <Styled.ExampleImg key={filename} src={`assets/previews/${filename}.png`} />
-                    </Styled.ExampleContainer>
-                ))}
-            </Slider>
+            <div style={{ cursor: 'pointer' }}>
+                <Slider ref={sliderRef} slidesToShow={slidesToShow} {...settings}>
+                    { examples.map(filename => (
+                        <Styled.ExampleContainer>
+                            <Styled.ExampleImg key={filename} src={`assets/previews/${filename}.png`} />
+                        </Styled.ExampleContainer>
+                    ))}
+                </Slider>
+            </div>
         </Section>
     )
 }
