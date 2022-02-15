@@ -17,8 +17,8 @@ delete allowedSectionColors['Amaranth'];
 delete allowedSectionColors['White'];
 
 function getRandomColor() {
-    const colorList = Object.entries(colors);
-    const num = Math.floor(Math.random() * (colorList.length -1));
+    const colorList = Object.entries(allowedSectionColors);
+    const num = Math.floor(Math.random() * (colorList.length - 1));
 
     return colorList[num][1];
 };

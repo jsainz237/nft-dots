@@ -28,7 +28,7 @@ namespace Styled {
         border-radius: 0.25rem;
         max-height: ${props => props.expanded ? `${props.maxHeight ?? 200}px` : '82px'};
         overflow: hidden;
-        transition: opacity 0.1s ease;
+        transition: all 0.5s ease;
         margin-bottom: 1rem;
 
         &:hover {
