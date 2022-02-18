@@ -16,11 +16,17 @@ namespace Styled {
     export const ButtonWrapper = styled.div`
         display: flex;
         align-items: center;
+        margin-bottom: 1rem;
     `;
 
     export const Icon = styled(FontAwesomeIcon)`
         transition: opacity 0.3s ease;
         cursor: pointer;
+
+        @media screen and (max-width: 720px) {
+            font-size: 1.5rem;
+        }
+
         &:hover {
             opacity: 0.5;
         }
@@ -33,7 +39,11 @@ namespace Styled {
     export const ExampleImg = styled.img`
         width: 100%;
         border-radius: 1rem;
-        border: 1px solid lightgray;
+        border: 2px solid lightgray;
+
+        @media screen and (max-width: 720px) {
+            border-radius: 0.25rem;
+        }
     `;
 }
 

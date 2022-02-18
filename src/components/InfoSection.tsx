@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef } from 'react';
+import { FC, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 
@@ -10,14 +10,35 @@ import DOT from '../../public/assets/half_rotated_bottom_right.svg';
 
 namespace Styled {
     export const InfoWrapper = styled.div`
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-end;
+        margin-bottom: 7rem;
+
+        @media screen and (max-width: 540px) {
+            margin-bottom: 5rem;
+        }
+    `;
+
+    export const TriangleContainer = styled.div`
+        position: absolute;
+        bottom: 3rem;
+        right: 3rem;
+        height: 15rem;
+        width: 15rem;
+
+        @media screen and (max-width: 960px) {
+            height: 8rem;
+            width: 8rem;
+        }
+
+        @media screen and (max-width: 540px) {
+            height: 5rem;
+            width: 5rem;
+        }
+
     `;
 
     export const ListItemWrapper = styled.div`
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         margin-top: 0.5rem;
 
         *:first-child {
@@ -26,28 +47,18 @@ namespace Styled {
 
         * {
             font-size: 1.5rem;
+            @media screen and (max-width: 720px) {
+                font-size: 1rem;
+            }
         }
     `;
 }
 
 export const InfoSection: FC = () => {
     const theme: any = useTheme();
-    const dotRef = useRef<any>();
-
-    const triangleSize = '15rem'
-
-    // useEffect(() => {
-    //     window.addEventListener('scroll', () => {
-    //         if(dotRef.current) {
-    //             dotRef.current.style.transform = 
-    //                 `rotate(${window.scrollY / 15}deg)`;
-    //         }
-    //     })
-    // })
-
     const ListItem = ({ item }: { item: string }) => (
         <Styled.ListItemWrapper>
-            <FontAwesomeIcon icon={faCircleCheck} />
+            <FontAwesomeIcon icon={faCircleCheck} style={{ marginTop: 4 }} />
             <div>{item}</div> 
         </Styled.ListItemWrapper>
     );
@@ -57,22 +68,20 @@ export const InfoSection: FC = () => {
         'Each DOTs combination is randomly generated',
         '6 different properties',
         '5 different rarity values',
-        'Only 0.01 BNB per DOT',
+        `Only ${process.env.NEXT_PUBLIC_PRICE_IN_BNB} BNB per DOT`,
     ]
 
     return (
-        <Section style={{ background: theme.s1 }} withContainer>
+        <Section style={{ position: 'relative', background: theme.s1 }} withContainer>
             <Styled.InfoWrapper>
-                <div style={{ marginBottom: '7rem' }}>
-                    <h1 className='section-title'>Info & Specs</h1>
-                    <div>
-                        {list.map((str, i) => <ListItem key={i} item={str} />)}
-                    </div>
-                </div>
-                <div ref={dotRef}>
-                    <DOT height={triangleSize} width={triangleSize} />
+                <h1 className='section-title'>Info & Specs</h1>
+                <div>
+                    {list.map((str, i) => <ListItem key={i} item={str} />)}
                 </div>
             </Styled.InfoWrapper>
+            <Styled.TriangleContainer>
+                <DOT height="100%" width="100%" />
+            </Styled.TriangleContainer>
         </Section>
     )
 }

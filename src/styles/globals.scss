@@ -20,11 +20,19 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0;
   margin-bottom: 1rem;
   font-weight: bold;
+
+  @media screen and (max-width: 720px) {
+    font-size: 2rem;
+  }
 }
 
 p, a, button, div {
   font-family: $Cardo;
   font-size: 1.25rem;
+
+  @media screen and (max-width: 720px) {
+    font-size: 1rem;
+  }
 }
 
 a {
