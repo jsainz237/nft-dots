@@ -21,36 +21,46 @@ namespace Styled {
         overflow: hidden;
     `;
 
-    export const TitleWrapper = styled.div`
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: flex-end;
-        margin-bottom: 8rem;
-    `;
+    export namespace Title {
+        export const Wrapper = styled.div`
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-end;
+            margin-bottom: 8rem;
+        `;
+
+        export const Dot = styled.div`
+            height: 7.5rem;
+            width: 7.5rem;
+            margin: 0;
+            border-radius: 100px;
+            background: ${props => props.theme.s0};
+        `;
+
+        export const Text = styled.h1`
+            color: ${props => props.theme.s0};
+            font-size: 10rem;
+            margin: 0;
+        `;
+
+        export const Subtitle = styled.p`
+            color: ${props => props.theme.s0};
+            font-size: 1.5rem;
+            margin: 0;
+        `;
+    }
 
     export const Negative = styled.div`
         position: absolute;
         pointer-events: none;
-        top: 0;
-        right: -52%;
-        height: 100%;
+        top: -211px;
+        right: -51%;
+        height: 130%;
         width: 100%;
         transform: skewX(40deg);
         background: ${props => props.theme.s0};
         mix-blend-mode: difference;
-    `;
-
-    export const Title = styled.h1`
-        color: ${props => props.theme.s0};
-        font-size: 10rem;
-        margin: 0;
-    `;
-
-    export const Subtitle = styled.p`
-        color: ${props => props.theme.s0};
-        font-size: 1.5rem;
-        margin: 0;
     `;
 
     export const Header = styled.header`
@@ -60,71 +70,79 @@ namespace Styled {
             margin-right: 2rem;
         }
     `;
+    export namespace Minting {
+        export const ActionWrapper = styled.div`
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 6rem;
+        `;
 
-    export const ActionWrapper = styled.div`
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 6rem;
-    `;
+        export const ActionButton = styled.button`
+            padding: 0;
+            margin: 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+            
+            &:hover {
+                opacity: 0.7;
+            }
+        `;
 
-    export const ActionButton = styled.button`
-        padding: 0;
-        margin: 0;
-        background: none;
-        border: none;
-        cursor: pointer;
-        transition: opacity 0.2s ease;
-        
-        &:hover {
-            opacity: 0.7;
-        }
-    `;
+        export const MintButton = styled.button`
+            padding: 1rem 6rem;
+            background: none;
+            border-radius: 50px;
+            color: ${props => props.theme.s0};
+            border: ${props => `2px solid ${props.theme.s0}`};
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.2s ease;
 
-    export const MintButton = styled.button`
-        padding: 1rem 6rem;
-        background: none;
-        border-radius: 50px;
-        color: ${props => props.theme.s0};
-        border: ${props => `2px solid ${props.theme.s0}`};
-        cursor: pointer;
-        font-size: 1.5rem;
-        transition: all 0.2s ease;
+            &:hover:not(:disabled) {
+                background: ${props => props.theme.s0};
+                color: black;
+            }
 
-        &:hover:not(:disabled) {
-            background: ${props => props.theme.s0};
-            color: black;
-        }
+            &:disabled {
+                cursor: not-allowed;
+            }
+        `;
 
-        &:disabled {
-            cursor: not-allowed;
-        }
-    `;
+        export const CounterContainer = styled.div`
+            display: flex;
+            width: 198px;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        `;
 
-    export const CounterContainer = styled.div`
-        display: flex;
-        width: 12%;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 1rem;
-    `;
+        export const Counter = styled.h1`
+            margin: 0;
+            font-size: 2.5rem;
+            color: ${props => props.theme.s0};
+        `;
 
-    export const Counter = styled.h1`
-        margin: 0;
-        font-size: 2.5rem;
-        color: ${props => props.theme.s0};
-    `;
+        export const Price = styled.p`
+            color: ${props => props.theme.s0};
+            margin-top: 1rem;
+        `;
+    }
 }
 
-export const HomeSection: FC = () => {
+export const HomeSection: FC = () => {    
     const MINT_LIMIT = 10, MINT_MIN = 1;
     const [count, setCount] = useState<number>(MINT_MIN);
     const theme: any = useTheme();
 
+    const readyToMint = process.env.NEXT_PUBLIC_IS_READY === 'true';
+
     const homeIconSize = "2rem";
-    const dotSize = "7.5rem";
+    const dotSize = 120;
 
     const incrementCounter = () => {
         if(count < MINT_LIMIT) {
@@ -146,51 +164,49 @@ export const HomeSection: FC = () => {
                     height={homeIconSize}
                     width={homeIconSize}
                 />
-                <Styled.Subtitle>INFO</Styled.Subtitle>
-                <Styled.Subtitle>FAQ</Styled.Subtitle>
+                <Styled.Title.Subtitle>INFO</Styled.Title.Subtitle>
+                <Styled.Title.Subtitle>FAQ</Styled.Title.Subtitle>
             </Styled.Header>
             <WalletButton/>
         </div>
     );
 
     const renderTitle = () => (
-        <Styled.TitleWrapper>
-            <Styled.Title>D</Styled.Title>
-            <LargeDot 
-                height={dotSize}
-                width={dotSize}
-                color={theme.s0}
-                style={{
-                    margin: "2rem 0.25rem"
-                }}
-            />
-            <Styled.Title>TS</Styled.Title>
-            <Styled.Subtitle style={{
+        <Styled.Title.Wrapper>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Styled.Title.Text>D</Styled.Title.Text>
+                <Styled.Title.Dot />
+                <Styled.Title.Text>TS</Styled.Title.Text>
+            </div>
+            <Styled.Title.Subtitle style={{
                 marginBottom: '2rem',
                 marginLeft: '0.5rem',
                 fontSize: '2.2rem',
             }}>
                 (NFTs)
-            </Styled.Subtitle>
-        </Styled.TitleWrapper>
+            </Styled.Title.Subtitle>
+        </Styled.Title.Wrapper>
     );
 
     const renderMinting = () => (
-        <Styled.ActionWrapper>
-            <Styled.CounterContainer>
-                <Styled.ActionButton onClick={decrementCounter}>
+        <Styled.Minting.ActionWrapper>
+            <Styled.Minting.CounterContainer>
+                <Styled.Minting.ActionButton onClick={decrementCounter}>
                     <FontAwesomeIcon color={theme.s0} size="2x" icon={faMinusCircle} />
-                </Styled.ActionButton>
-                <Styled.Counter>{count}</Styled.Counter>
-                <Styled.ActionButton onClick={incrementCounter}>
+                </Styled.Minting.ActionButton>
+                <Styled.Minting.Counter>{count}</Styled.Minting.Counter>
+                <Styled.Minting.ActionButton onClick={incrementCounter}>
                     <FontAwesomeIcon color={theme.s0} size="2x" icon={faPlusCircle} />
-                </Styled.ActionButton>
-            </Styled.CounterContainer>
+                </Styled.Minting.ActionButton>
+            </Styled.Minting.CounterContainer>
             
-            <Styled.MintButton>
-                Mint
-            </Styled.MintButton>
-        </Styled.ActionWrapper>
+            <Styled.Minting.MintButton disabled={!readyToMint}>
+                { readyToMint ? 'Mint' : 'Not available' }
+            </Styled.Minting.MintButton>
+            <Styled.Minting.Price style={{ color: theme.s0 }}>
+                ( {process.env.NEXT_PUBLIC_PRICE_IN_BNB} BNB each )
+            </Styled.Minting.Price>
+        </Styled.Minting.ActionWrapper>
     )
 
     return (
