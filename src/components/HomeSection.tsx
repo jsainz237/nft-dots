@@ -31,40 +31,76 @@ namespace Styled {
         `;
 
         export const Dot = styled.div`
+            position: relative;
             height: 7.5rem;
             width: 7.5rem;
             margin: 0;
             border-radius: 100px;
             background: ${props => props.theme.s0};
+            
+            @media screen and (max-width: 720px) {
+                height: 4rem;
+                width: 4rem;
+            }
         `;
 
         export const Text = styled.h1`
             color: ${props => props.theme.s0};
             font-size: 10rem;
             margin: 0;
+
+            @media screen and (max-width: 720px) {
+                font-size: 5rem;
+            }
         `;
 
         export const Subtitle = styled.p`
             color: ${props => props.theme.s0};
-            font-size: 1.5rem;
-            margin: 0;
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            margin-left: 0.5rem;
+            
+            @media screen and (max-width: 720px) {
+                font-size: 0.875rem;
+                margin-bottom: 1rem;
+            }
         `;
     }
 
     export const Negative = styled.div`
         position: absolute;
-        pointer-events: none;
-        top: -211px;
-        right: -51%;
-        height: 130%;
-        width: 100%;
-        transform: skewX(40deg);
-        background: ${props => props.theme.s0};
+        top: -100vh;
+        left: -100vw;
+        /* pointer-events: none; */
+        height: 200vh;
+        width: 200vw;
+        background-color: ${props => props.theme.s0};
+        background: ${({ theme }) => {
+            const stop = 50;
+            return `linear-gradient(
+                45deg,
+                black 0%,
+                black ${stop}%,
+                ${theme.s0} ${stop}%,
+                ${theme.s0} 100%
+            )`
+        }};
         mix-blend-mode: difference;
+
+        /* @media screen and (max-width: 720px) {
+            top: -389px;
+            left: -78%;
+            width: 130%;
+            transform: rotate(-37deg);
+        } */
     `;
 
     export const Header = styled.header`
         display: flex;
+
+        @media screen and (max-width: 720px) {
+            display: none;
+        }
 
         *:not(:last-child) {
             margin-right: 2rem;
@@ -86,9 +122,14 @@ namespace Styled {
             border: none;
             cursor: pointer;
             transition: opacity 0.2s ease;
+            font-size: 2rem;
             
             &:hover {
                 opacity: 0.7;
+            }
+
+            @media screen and (max-width: 720px) {
+                font-size: 1.5rem;
             }
         `;
 
@@ -101,6 +142,11 @@ namespace Styled {
             cursor: pointer;
             font-size: 1.5rem;
             transition: all 0.2s ease;
+
+            @media screen and (max-width: 720px) {
+                font-size: 1rem;
+                padding: 1rem 3rem;
+            }
 
             &:hover:not(:disabled) {
                 background: ${props => props.theme.s0};
@@ -119,12 +165,20 @@ namespace Styled {
             align-items: center;
             justify-content: space-between;
             margin-bottom: 1rem;
+
+            @media screen and (max-width: 720px) {
+                width: 124px;
+            }
         `;
 
         export const Counter = styled.h1`
             margin: 0;
             font-size: 2.5rem;
             color: ${props => props.theme.s0};
+
+            @media screen and (max-width: 720px) {
+                font-size: 1.5rem;
+            }
         `;
 
         export const Price = styled.p`
@@ -175,14 +229,12 @@ export const HomeSection: FC = () => {
         <Styled.Title.Wrapper>
             <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Styled.Title.Text>D</Styled.Title.Text>
-                <Styled.Title.Dot />
+                <Styled.Title.Dot>
+                    <Styled.Negative />
+                </Styled.Title.Dot>
                 <Styled.Title.Text>TS</Styled.Title.Text>
             </div>
-            <Styled.Title.Subtitle style={{
-                marginBottom: '2rem',
-                marginLeft: '0.5rem',
-                fontSize: '2.2rem',
-            }}>
+            <Styled.Title.Subtitle>
                 (NFTs)
             </Styled.Title.Subtitle>
         </Styled.Title.Wrapper>
@@ -192,11 +244,11 @@ export const HomeSection: FC = () => {
         <Styled.Minting.ActionWrapper>
             <Styled.Minting.CounterContainer>
                 <Styled.Minting.ActionButton onClick={decrementCounter}>
-                    <FontAwesomeIcon color={theme.s0} size="2x" icon={faMinusCircle} />
+                    <FontAwesomeIcon color={theme.s0} icon={faMinusCircle} />
                 </Styled.Minting.ActionButton>
                 <Styled.Minting.Counter>{count}</Styled.Minting.Counter>
                 <Styled.Minting.ActionButton onClick={incrementCounter}>
-                    <FontAwesomeIcon color={theme.s0} size="2x" icon={faPlusCircle} />
+                    <FontAwesomeIcon color={theme.s0} icon={faPlusCircle} />
                 </Styled.Minting.ActionButton>
             </Styled.Minting.CounterContainer>
             
@@ -211,7 +263,6 @@ export const HomeSection: FC = () => {
 
     return (
         <Styled.SectionContainer>
-            <Styled.Negative />
             {renderHeader()}
             {renderTitle()}
             {renderMinting()}
