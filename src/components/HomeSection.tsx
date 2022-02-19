@@ -69,30 +69,23 @@ namespace Styled {
 
     export const Negative = styled.div`
         position: absolute;
-        top: -100vh;
-        left: -100vw;
-        /* pointer-events: none; */
+        top: calc(-100vh + 50%);
+        left: calc(-100vw + 50%);
+        pointer-events: none;
         height: 200vh;
         width: 200vw;
+        mix-blend-mode: difference;
         background-color: ${props => props.theme.s0};
         background: ${({ theme }) => {
             const stop = 50;
             return `linear-gradient(
                 45deg,
-                black 0%,
-                black ${stop}%,
+                ${theme.s0} 0%,
                 ${theme.s0} ${stop}%,
-                ${theme.s0} 100%
+                black ${stop}%,
+                black 100%
             )`
         }};
-        mix-blend-mode: difference;
-
-        /* @media screen and (max-width: 720px) {
-            top: -389px;
-            left: -78%;
-            width: 130%;
-            transform: rotate(-37deg);
-        } */
     `;
 
     export const Header = styled.header`
