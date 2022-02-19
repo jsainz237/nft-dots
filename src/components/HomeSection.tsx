@@ -36,7 +36,16 @@ namespace Styled {
             width: 7.5rem;
             margin: 0;
             border-radius: 100px;
-            background: ${props => props.theme.s0};
+            ${props => {
+                const percent = Math.floor(Math.random() * (100 + 1));
+                return percent <= 3 ? `
+                    border: 4px solid ${props.theme.s0};
+                ` : `
+                    background: ${props.theme.s0};
+                `
+            }}
+            /* border: 4px solid ${props => props.theme.s0}; */
+            /* background: ${props => props.theme.s0}; */
             
             @media screen and (max-width: 720px) {
                 height: 4rem;
@@ -77,8 +86,10 @@ namespace Styled {
         mix-blend-mode: difference;
         background-color: ${props => props.theme.s0};
         background: ${({ theme }) => {
+            const percent = Math.floor(Math.random() * (100 + 1));
             const stop = 50;
-            return `linear-gradient(
+
+            return percent <= 3 ? theme.s0 : `linear-gradient(
                 45deg,
                 ${theme.s0} 0%,
                 ${theme.s0} ${stop}%,
