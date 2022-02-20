@@ -83,15 +83,15 @@ export const FAQSection: FC = () => {
             <h1 className='section-title'>FAQ</h1>
             <FAQCard title='How do I get DOTs?'>
                 <p>
-                    First you will need <a href='https://metamask.io'>MetaMask</a> intalled. Once Installed,
+                    First you will need <a target="_blank" href='https://metamask.io'>MetaMask</a> intalled. Once Installed,
                     you will need to add the Binance Smart Chain (Mainnet) to you MetaMask networks.
                 </p>
-                <p><a href='https://academy.binance.com/en/articles/connecting-metamask-to-binance-smart-chain'>
+                <p><a target="_blank" href='https://academy.binance.com/en/articles/connecting-metamask-to-binance-smart-chain'>
                     Here's a step-by-step guide on how to do that.
                 </a></p>
                 <p>
-                    Once that is all set up, you need Binance Coin (BNB). You can buy BNB on exchanges like <a href='https://binanace.com'>Binance</a> and
-                    <a href='https://kucoin.com'> Kucoin</a>. Once you have bought some BNB in an exchange, you'll need to transfer some or all of that BNB 
+                    Once that is all set up, you need Binance Coin (BNB). You can buy BNB on exchanges like <a target="_blank" href='https://binanace.com'>Binance</a> and
+                    <a target="_blank" href='https://kucoin.com'> Kucoin</a>. Once you have bought some BNB in an exchange, you'll need to transfer some or all of that BNB 
                     from the exchange to your MetaMask Wallet. After that transaction finishes, you will be able to buy DOTs!
                 </p>
                 <p>
@@ -111,10 +111,10 @@ export const FAQSection: FC = () => {
                     Say a DOT costs {process.env.NEXT_PUBLIC_PRICE_IN_BNB} BNB to mint -- you'll need more than {process.env.NEXT_PUBLIC_PRICE_IN_BNB} BNB in your wallet to get a
                     transaction accepted. Sadly, it's impossible to know how much more.
                     At the time of the transaction, your MetaMask wallet will recommend a Gas amount. To learn more about gas,
-                    visit <a href="https://www.investopedia.com/terms/g/gas-ethereum.asp">investopedia.com.</a>
+                    visit <a target="_blank" href="https://www.investopedia.com/terms/g/gas-ethereum.asp">investopedia.com.</a>
                 </p>
                 <p>
-                    You can check out the <a href="https://bscscan.com/gastracker">BscScan Binance Smart Chain Gas Tracker</a> or similar sites to have an idea of Gas prices at 
+                    You can check out the <a target="_blank" href="https://bscscan.com/gastracker">BscScan Binance Smart Chain Gas Tracker</a> or similar sites to have an idea of Gas prices at 
                     the moment of your transaction.
                 </p>
             </FAQCard>

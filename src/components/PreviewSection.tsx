@@ -39,6 +39,7 @@ namespace Styled {
 
     export const ExampleContainer = styled.div`
         padding: 0 0.5rem;
+        pointer-events: none;
     `;
 
     export const ExampleImg = styled.img`
@@ -67,6 +68,12 @@ export const PreviewSection: FC = () => {
         responsive: [
             {
                 breakpoint: 960,
+                settings: {
+                    slidesToShow: 3,
+                }
+            },
+            {
+                breakpoint: 720,
                 settings: {
                     slidesToShow: 2,
                 }

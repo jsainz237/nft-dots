@@ -12,6 +12,13 @@ namespace Styled {
         width: 100%;
         max-width: 720px;
         font-weight: bold;
+
+        a {
+            color: #3F84E5;
+            &:hover {
+                opacity: 0.7;
+            }
+        }
     `;
 
     export const BottomContainer = styled.div`
@@ -54,6 +61,11 @@ export const InvestSection: FC = () => {
                 <p>
                     However, that being said, if you like the art, buy some!
                     They're cheaper than the monkeys ¯\_(ツ)_/¯
+                </p>
+                <p>
+                    If you are looking for a cool NFT project to invest in check out
+                    <a target="_blank" href="https://simpleplanets.com"> Simple Planets! 🪐</a> I'll be a developer 
+                    on that project after this one is completed.
                 </p>
                 <Styled.BottomContainer>
                     <BottomFrameDots height={frameDotsSize} width={frameDotsSize} />
