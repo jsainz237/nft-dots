@@ -78,7 +78,7 @@ export const FAQSection: FC = () => {
     const theme: any = useTheme();
 
     return (
-        <Section style={{ background: theme.s3 }} withContainer>
+        <Section sectionId="faq" style={{ background: theme.s3 }} withContainer>
             <h1 className='section-title'>FAQ</h1>
             <FAQCard title='How do I get DOTs?'>
                 <p>

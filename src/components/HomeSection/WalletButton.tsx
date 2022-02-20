@@ -5,8 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWallet, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { ethers } from 'ethers';
 
-import { useAppSelector, useAppDispatch } from '../state/hooks';
-import { selectWallet, setAddress, clearAddress } from '../state/slices/wallet.state';
+import { useAppSelector, useAppDispatch } from '../../state/hooks';
+import { selectWallet, setAddress, clearAddress } from '../../state/slices/wallet.state';
 
 namespace Styled {
     export const Container = styled.div`
@@ -71,7 +71,6 @@ namespace Styled {
 }
 
 export const WalletButton: FC = () => {
-    const theme: any = useTheme();
     const [showDropdown, setshowDropdown] = useState<boolean>(false);
     const dropdownRef = useRef();
     const walletButtonRef = useRef();
@@ -82,6 +81,8 @@ export const WalletButton: FC = () => {
     const [connectedToBSC, setConnectedToBSC] = useState<boolean>();
 
     const dispatch = useAppDispatch();
+
+    const readyToMint = process.env.NEXT_PUBLIC_IS_READY === 'true';
     
     useEffect(() => {
         async function connect() {
@@ -197,7 +198,7 @@ export const WalletButton: FC = () => {
             </Styled.WalletButton>
             <Styled.Dropdown ref={dropdownRef} visible={showDropdown}>
                 <button onClick={disconnectWallet} style={{ color: 'red' }}>Disconnect</button>
-                <button>My DOTS</button>
+                { readyToMint && <button>My DOTS</button> }
             </Styled.Dropdown>
         </Styled.Container>
     )

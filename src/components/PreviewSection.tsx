@@ -78,7 +78,7 @@ export const PreviewSection: FC = () => {
     }
 
     return (
-        <Section style={{ color: 'white' }} withContainer>
+        <Section sectionId="preview" style={{ color: 'white' }} withContainer>
             <Styled.TitleContainer>
                 <h1 className='section-title'>Previews</h1>
                 <Styled.ButtonWrapper>
@@ -89,8 +89,8 @@ export const PreviewSection: FC = () => {
             <div style={{ cursor: 'pointer' }}>
                 <Slider ref={sliderRef} slidesToShow={slidesToShow} {...settings}>
                     { examples.map(filename => (
-                        <Styled.ExampleContainer>
-                            <Styled.ExampleImg key={filename} src={`assets/previews/${filename}.png`} />
+                        <Styled.ExampleContainer key={filename}>
+                            <Styled.ExampleImg src={`assets/previews/${filename}.png`} />
                         </Styled.ExampleContainer>
                     ))}
                 </Slider>

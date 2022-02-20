@@ -11,17 +11,24 @@ namespace Styled {
 }
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
+    sectionId: string;
     withContainer?: boolean;
     containerProps?: React.HTMLAttributes<HTMLDivElement>;
 }
 
-export const Section: FC<Props> = ({ withContainer, containerProps, children, ...props }) => {
+export const Section: FC<Props> = ({
+    sectionId,
+    withContainer,
+    containerProps,
+    children,
+    ...props
+}) => {
     const childrenWithContainer = (
         <Container {...containerProps}>{children}</Container>
     )
 
     return (
-        <Styled.Section {...props}>
+        <Styled.Section id={sectionId} {...props}>
             { withContainer ? childrenWithContainer : children }
         </Styled.Section>
     )

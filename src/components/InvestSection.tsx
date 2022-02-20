@@ -28,6 +28,7 @@ export const InvestSection: FC = () => {
 
     return (
         <Section 
+            sectionId="invest"
             style={{ background: theme.s2 }} 
             withContainer
             containerProps={{

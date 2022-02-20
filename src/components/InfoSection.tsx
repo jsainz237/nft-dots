@@ -72,7 +72,7 @@ export const InfoSection: FC = () => {
     ]
 
     return (
-        <Section style={{ position: 'relative', background: theme.s1 }} withContainer>
+        <Section sectionId="info" style={{ position: 'relative', background: theme.s1 }} withContainer>
             <Styled.InfoWrapper>
                 <h1 className='section-title'>Info & Specs</h1>
                 <div>
