@@ -14,7 +14,8 @@ namespace Styled {
         font-weight: bold;
 
         a {
-            color: #3F84E5;
+            color: black;
+            text-decoration: underline;
             &:hover {
                 opacity: 0.7;
             }
@@ -63,8 +64,8 @@ export const InvestSection: FC = () => {
                     They're cheaper than the monkeys ¯\_(ツ)_/¯
                 </p>
                 <p>
-                    If you are looking for a cool NFT project to invest in check out
-                    <a target="_blank" href="https://simpleplanets.com"> Simple Planets! 🪐</a> I'll be a developer 
+                    If you are looking for a cool NFT project to invest in check
+                    out <a target="_blank" href="https://simpleplanets.com">Simple Planets!</a> 🪐 I'll be a developer 
                     on that project after this one is completed.
                 </p>
                 <Styled.BottomContainer>
