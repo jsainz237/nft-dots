@@ -6,6 +6,7 @@ import "@nomiclabs/hardhat-waffle";
 import "@typechain/hardhat";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
+import "@nomiclabs/hardhat-ethers";
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ const config: HardhatUserConfig = {
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
   },
+  // @ts-ignore
   gasReporter: {
     enabled: process.env.REPORT_GAS !== undefined,
     currency: "USD",
