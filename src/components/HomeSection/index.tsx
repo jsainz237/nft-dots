@@ -2,20 +2,24 @@ import { FC, useMemo, useState } from "react";
 import { useTheme } from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faMinusCircle } from '@fortawesome/free-solid-svg-icons';
+
+import { selectWallet } from '../../state/slices/wallet.state';
 import { WalletButton } from "./WalletButton";
 import { Styled } from './styles';
+import { useAppSelector } from "../../state/hooks";
 
-export const HomeSection: FC = () => {  
-    const isLegendary = () => Math.floor(Math.random() * (100 + 1)) <= 3;
+const MINT_LIMIT = 10, MINT_MIN = 1;
 
-    const legendaryDot = useMemo(isLegendary, []);
-    const legendaryNeg = useMemo(isLegendary, []);
-
-    const MINT_LIMIT = 10, MINT_MIN = 1;
+export const HomeSection: FC = () => {
+    const walletAddress = useAppSelector(selectWallet)
     const [count, setCount] = useState<number>(MINT_MIN);
     const theme: any = useTheme();
 
+    const legendaryDot = useMemo(() => Math.floor(Math.random() * (100 + 1)) <= 3, []);
+    const legendaryNeg = useMemo(() => Math.floor(Math.random() * (100 + 1)) <= 3, []);
+
     const readyToMint = process.env.NEXT_PUBLIC_IS_READY === 'true';
+    // const readyToMint = true;
 
     const incrementCounter = () => {
         if(count < MINT_LIMIT) {
@@ -69,8 +73,14 @@ export const HomeSection: FC = () => {
                 </Styled.Minting.ActionButton>
             </Styled.Minting.CounterContainer>
             
-            <Styled.Minting.MintButton disabled={!readyToMint}>
-                { readyToMint ? 'Mint' : 'Not available' }
+            <Styled.Minting.MintButton disabled={!readyToMint || !walletAddress}>
+                { 
+                    !readyToMint 
+                    ? 'Not available'
+                    : !walletAddress
+                    ? 'No wallet connected'
+                    : 'Mint'
+                }
             </Styled.Minting.MintButton>
             <Styled.Minting.Price style={{ color: theme.s0 }}>
                 ( {process.env.NEXT_PUBLIC_PRICE_IN_BNB} BNB each )

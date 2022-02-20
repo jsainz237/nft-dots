@@ -24,6 +24,7 @@ namespace Styled {
         background: none;
         text-align: left;
         width: 100%;
+        color: black;
         padding: 1.5rem 2rem;
         border: 1px solid lightgray;
         box-shadow: 0px 2px 4px 0px lightgrey;

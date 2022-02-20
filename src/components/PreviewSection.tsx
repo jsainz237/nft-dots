@@ -17,14 +17,19 @@ namespace Styled {
         display: flex;
         align-items: center;
         margin-bottom: 1rem;
+
+        @media screen and (max-width: 720px) {
+            
+        }
     `;
 
-    export const Icon = styled(FontAwesomeIcon)`
+    export const Icon = styled(FontAwesomeIcon)<{ margined?: boolean }>`
+        margin-right: ${({ margined }) => margined && '1rem'};
         transition: opacity 0.3s ease;
         cursor: pointer;
 
         @media screen and (max-width: 720px) {
-            font-size: 1.5rem;
+            margin-right: ${({ margined }) => margined && '0.5rem'};
         }
 
         &:hover {
@@ -63,7 +68,7 @@ export const PreviewSection: FC = () => {
             {
                 breakpoint: 960,
                 settings: {
-                    slidesToShow: 3,
+                    slidesToShow: 2,
                 }
             },
         ]
@@ -82,7 +87,7 @@ export const PreviewSection: FC = () => {
             <Styled.TitleContainer>
                 <h1 className='section-title'>Previews</h1>
                 <Styled.ButtonWrapper>
-                    <Styled.Icon onClick={() => scroll(-1)} size='2x' icon={faCircleArrowLeft} style={{ marginRight: '1rem' }} />
+                    <Styled.Icon onClick={() => scroll(-1)} size='2x' icon={faCircleArrowLeft} margined />
                     <Styled.Icon onClick={() => scroll(1)} size='2x' icon={faCircleArrowRight} />
                 </Styled.ButtonWrapper>
             </Styled.TitleContainer>
