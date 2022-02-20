@@ -148,10 +148,6 @@ export namespace Styled {
             justify-content: center;
             align-items: center;
             margin-bottom: 6rem;
-
-            @media screen and (max-height: 800px) {
-                margin-bottom: unset;
-            }
         `;
 
         export const ActionButton = styled.button`

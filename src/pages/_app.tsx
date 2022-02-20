@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import '../styles/globals.scss'
 import type { AppProps } from 'next/app'
 import { config } from '@fortawesome/fontawesome-svg-core'
@@ -9,9 +10,15 @@ import { getTheme } from '../styles/generate-theme';
 config.autoAddCss = false
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return (
+  const [theme, setTheme] = useState<any>();
+
+  useEffect(() => {
+    setTheme(getTheme(4));
+  }, [])
+
+  return !theme ? null : (
     <Provider store={store}>
-      <ThemeProvider theme={getTheme(4)}>
+      <ThemeProvider theme={theme}>
         <Component {...pageProps} />
       </ThemeProvider>
     </Provider>

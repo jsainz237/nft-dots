@@ -94,7 +94,7 @@ export const PreviewSection: FC = () => {
             <Styled.TitleContainer>
                 <h1 className='section-title'>Previews</h1>
                 <Styled.ButtonWrapper>
-                    <Styled.Icon onClick={() => scroll(-1)} size='2x' icon={faCircleArrowLeft} margined />
+                    <Styled.Icon onClick={() => scroll(-1)} size='2x' icon={faCircleArrowLeft} margined={true} />
                     <Styled.Icon onClick={() => scroll(1)} size='2x' icon={faCircleArrowRight} />
                 </Styled.ButtonWrapper>
             </Styled.TitleContainer>

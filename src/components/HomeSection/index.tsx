@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { useTheme } from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle, faMinusCircle } from '@fortawesome/free-solid-svg-icons';
@@ -13,13 +13,16 @@ const MINT_LIMIT = 10, MINT_MIN = 1;
 export const HomeSection: FC = () => {
     const walletAddress = useAppSelector(selectWallet)
     const [count, setCount] = useState<number>(MINT_MIN);
+    const [isDotLegendary, setDotRarity] = useState<boolean>(false);
+    const [isNegLegendary, setNEgRarity] = useState<boolean>(false);
     const theme: any = useTheme();
 
-    const legendaryDot = useMemo(() => Math.floor(Math.random() * (100 + 1)) <= 3, []);
-    const legendaryNeg = useMemo(() => Math.floor(Math.random() * (100 + 1)) <= 3, []);
-
     const readyToMint = process.env.NEXT_PUBLIC_IS_READY === 'true';
-    // const readyToMint = true;
+    
+    useEffect(() => {
+        setDotRarity(Math.floor(Math.random() * (100 + 1)) <= 3);
+        setNEgRarity(Math.floor(Math.random() * (100 + 1)) <= 3);
+    }, []);
 
     const incrementCounter = () => {
         if(count < MINT_LIMIT) {
@@ -50,8 +53,8 @@ export const HomeSection: FC = () => {
         <Styled.Title.Wrapper>
             <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Styled.Title.Text>D</Styled.Title.Text>
-                <Styled.Title.Dot legendary={legendaryDot}>
-                    <Styled.Negative legendary={legendaryNeg} />
+                <Styled.Title.Dot legendary={isDotLegendary}>
+                    <Styled.Negative legendary={isNegLegendary} />
                 </Styled.Title.Dot>
                 <Styled.Title.Text>TS</Styled.Title.Text>
             </div>
