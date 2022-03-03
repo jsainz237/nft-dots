@@ -4,16 +4,19 @@ pragma solidity ^0.8.4;
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "./lib/RandomlyAssigned.sol";
 
-contract Dot is ERC721, ERC721URIStorage, AccessControl, RandomlyAssigned {
+contract Dot is ERC721, Pausable, ERC721URIStorage, AccessControl, RandomlyAssigned {
+    bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
     string private baseUri;
+    address owner;
 
     uint private supply = 10000;
     uint private maxMintable = 10;
@@ -23,7 +26,9 @@ contract Dot is ERC721, ERC721URIStorage, AccessControl, RandomlyAssigned {
     mapping(uint => address) owners;
 
     constructor() ERC721("Dot", "DOT") RandomlyAssigned(supply, 1) {
+        owner = msg.sender;
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _grantRole(PAUSER_ROLE, msg.sender);
         _grantRole(MINTER_ROLE, msg.sender);
     }
 
@@ -50,7 +55,7 @@ contract Dot is ERC721, ERC721URIStorage, AccessControl, RandomlyAssigned {
         return mintedDots[id] == 1;
     }
 
-    function payToMint(uint numTokens) public payable onlyRole(MINTER_ROLE) ensureAvailability returns (uint256[] memory) {       
+    function payToMint(uint numTokens) public payable ensureAvailability returns (uint256[] memory) {       
         require(numTokens > 0, "Must mint at least one");
         require(numTokens <= 10, "Cannot mint more than 10");
         require(totalSold() + numTokens <= supply, "Minting would exceed supply");
@@ -88,10 +93,50 @@ contract Dot is ERC721, ERC721URIStorage, AccessControl, RandomlyAssigned {
         maxMintable = max;
     }
 
+    function grantAdmin(address addr) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        _grantRole(DEFAULT_ADMIN_ROLE, addr);
+    }
+
+    function revokeAdmin(address addr) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(isNotOwner(addr), "Cannot revoke owner permissions");
+        _grantRole(DEFAULT_ADMIN_ROLE, addr);
+    }
+
+    function grantPauser(address addr) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        _grantRole(PAUSER_ROLE, addr);
+    }
+
+    function revokePauser(address addr) public onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(isNotOwner(addr), "Cannot revoke owner permissions");
+        _grantRole(PAUSER_ROLE, addr);
+    }
+
+    function isNotOwner(address addr) private view returns (bool) {
+        return addr != owner;
+    }
+
     // testing functions
 
     function addIdToMinted(uint id) public onlyRole(DEFAULT_ADMIN_ROLE) {
         mintedDots[id] = 1;
+    }
+
+    // need this for libraries
+    
+    function _beforeTokenTransfer(address from, address to, uint256 tokenId)
+        internal
+        whenNotPaused
+        override
+    {
+        super._beforeTokenTransfer(from, to, tokenId);
+    }
+
+    function pause() public onlyRole(PAUSER_ROLE) {
+        _pause();
+    }
+
+    function unpause() public onlyRole(PAUSER_ROLE) {
+        _unpause();
     }
 
     // The following functions are overrides required by Solidity.
