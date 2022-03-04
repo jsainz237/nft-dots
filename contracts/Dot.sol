@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "./lib/RandomlyAssigned.sol";
+import "@1001-digital/erc721-extensions/contracts/RandomlyAssigned.sol";
 
 contract Dot is ERC721, Pausable, ERC721URIStorage, AccessControl, RandomlyAssigned {
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");

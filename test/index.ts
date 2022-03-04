@@ -1,7 +1,7 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import chai, { expect } from "chai";
 import chaiAsPromised from 'chai-as-promised';
-import { BigNumber, Contract, ContractFactory } from "ethers";
+import { Contract, ContractFactory } from "ethers";
 import { ethers } from "hardhat";
 
 chai.use(chaiAsPromised);
@@ -33,6 +33,9 @@ describe("Dot Minting", function () {
   
     balance = await dots.balanceOf(addr1.getAddress());
     expect(balance).to.equal(4);
+
+    const totalSold = await dots.totalSold();
+    expect(totalSold).to.equal(4);
   });
 
   it("should not allow revoking of owner roles", async () => {
