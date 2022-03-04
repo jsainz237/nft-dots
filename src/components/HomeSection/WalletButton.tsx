@@ -143,7 +143,7 @@ export const WalletButton: FC = () => {
             const provider = new ethers.providers.Web3Provider(window.ethereum);            
             const connectedNetwork = await provider.getNetwork();
             if(connectedNetwork.chainId !== 56) {
-                setConnectedToBSC(false);
+                setConnectedToBSC(!!process.env.NEXT_PUBLIC_IS_TESTING);
                 return;
             } else {
                 setConnectedToBSC(true);
