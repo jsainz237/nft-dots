@@ -1,7 +1,7 @@
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import chai, { expect } from "chai";
 import chaiAsPromised from 'chai-as-promised';
-import { Contract, ContractFactory } from "ethers";
+import { BigNumber, Contract, ContractFactory } from "ethers";
 import { ethers } from "hardhat";
 
 chai.use(chaiAsPromised);
@@ -10,20 +10,21 @@ describe("Dot Minting", function () {
   let owner: SignerWithAddress, addr1: SignerWithAddress, addr2: SignerWithAddress;
   let Dots: ContractFactory;
   let dots: Contract;
+  let mint: (num: number, ether: number, addr?: SignerWithAddress) => Promise<any>;
 
   beforeEach(async () => {
     [owner, addr1, addr2] = await ethers.getSigners();
     Dots = await ethers.getContractFactory("Dot");
     dots = await Dots.deploy();
     await dots.deployed();
-  })
+
+    mint = (num, ether, addr = owner) =>
+      dots.connect(addr).payToMint(num, { value: ethers.utils.parseEther(ether.toString())});
+  });
 
   it("should mint correctly", async () => {
     let balance = await dots.balanceOf(addr1.getAddress());
     expect(balance).to.equal(0);
-
-    const mint = (num: number, ether: number, addr: SignerWithAddress = owner) =>
-      dots.connect(addr).payToMint(num, { value: ethers.utils.parseEther(ether.toString())});
 
     expect(mint(4, 0.001)).to.be.rejected;
     expect(mint(4, 0.001, addr1)).to.be.rejected;
@@ -71,4 +72,12 @@ describe("Dot Minting", function () {
     expect(await dots.isDotOwned(randomInt)).to.equal(true);
     expect(await dots.isDotOwned(16)).to.equal(false);
   });
+
+  it("should return correct totalSupply", async () => {
+    await mint(2, 2 * 0.005);
+    expect((await dots.totalSupply()).toNumber()).to.equal(10000 - 2);
+
+    await mint(4, 4 * 0.005);
+    expect((await dots.totalSupply()).toNumber()).to.equal(10000 - 2 - 4);
+  })
 });

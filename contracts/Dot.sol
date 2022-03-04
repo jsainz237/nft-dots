@@ -4,14 +4,144 @@ pragma solidity ^0.8.4;
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "@1001-digital/erc721-extensions/contracts/RandomlyAssigned.sol";
 
-contract Dot is ERC721, Pausable, ERC721URIStorage, AccessControl, RandomlyAssigned {
+/// @author 1001.digital
+/// @title A token tracker that limits the token supply and increments token IDs on each new mint.
+abstract contract WithLimitedSupply {
+    using Counters for Counters.Counter;
+
+    /// @dev Emitted when the supply of this collection changes
+    event SupplyChanged(uint256 indexed supply);
+
+    // Keeps track of how many we have minted
+    Counters.Counter private _tokenCount;
+
+    /// @dev The maximum count of tokens this token tracker will hold.
+    uint256 private _totalSupply;
+
+    /// Instanciate the contract
+    /// @param totalSupply_ how many tokens this collection should hold
+    constructor (uint256 totalSupply_) {
+        _totalSupply = totalSupply_;
+    }
+
+    /// @dev Get the max Supply
+    /// @return the maximum token count
+    function totalSupply() public virtual view returns (uint256) {
+        return _totalSupply;
+    }
+
+    /// @dev Get the current token count
+    /// @return the created token count
+    function tokenCount() public view returns (uint256) {
+        return _tokenCount.current();
+    }
+
+    /// @dev Check whether tokens are still available
+    /// @return the available token count
+    function availableTokenCount() public view returns (uint256) {
+        return totalSupply() - tokenCount();
+    }
+
+    /// @dev Increment the token count and fetch the latest count
+    /// @return the next token id
+    function nextToken() internal virtual returns (uint256) {
+        uint256 token = _tokenCount.current();
+
+        _tokenCount.increment();
+
+        return token;
+    }
+
+    /// @dev Check whether another token is still available
+    modifier ensureAvailability() {
+        require(availableTokenCount() > 0, "No more tokens available");
+        _;
+    }
+
+    /// @param amount Check whether number of tokens are still available
+    /// @dev Check whether tokens are still available
+    modifier ensureAvailabilityFor(uint256 amount) {
+        require(availableTokenCount() >= amount, "Requested number of tokens not available");
+        _;
+    }
+
+    /// Update the supply for the collection
+    /// @param _supply the new token supply.
+    /// @dev create additional token supply for this collection.
+    function _setSupply(uint256 _supply) internal virtual {
+        require(_supply > tokenCount(), "Can't set the supply to less than the current token count");
+        _totalSupply = _supply;
+
+        emit SupplyChanged(totalSupply());
+    }
+}
+
+/// @author 1001.digital
+/// @title Randomly assign tokenIDs from a given set of tokens.
+abstract contract RandomlyAssigned is WithLimitedSupply {
+    // Used for random index assignment
+    mapping(uint256 => uint256) private tokenMatrix;
+
+    // The initial token ID
+    uint256 private startFrom;
+
+    /// Instanciate the contract
+    /// @param _totalSupply how many tokens this collection should hold
+    /// @param _startFrom the tokenID with which to start counting
+    constructor (uint256 _totalSupply, uint256 _startFrom)
+        WithLimitedSupply(_totalSupply)
+    {
+        startFrom = _startFrom;
+    }
+
+    /// Get the next token ID
+    /// @dev Randomly gets a new token ID and keeps track of the ones that are still available.
+    /// @return the next token ID
+    function nextToken() internal override ensureAvailability returns (uint256) {
+        uint256 maxIndex = totalSupply() - tokenCount();
+        uint256 random = uint256(keccak256(
+            abi.encodePacked(
+                msg.sender,
+                block.coinbase,
+                block.difficulty,
+                block.gaslimit,
+                block.timestamp
+            )
+        )) % maxIndex;
+
+        uint256 value = 0;
+        if (tokenMatrix[random] == 0) {
+            // If this matrix position is empty, set the value to the generated random number.
+            value = random;
+        } else {
+            // Otherwise, use the previously stored number from the matrix.
+            value = tokenMatrix[random];
+        }
+
+        // If the last available tokenID is still unused...
+        if (tokenMatrix[maxIndex - 1] == 0) {
+            // ...store that ID in the current matrix position.
+            tokenMatrix[random] = maxIndex - 1;
+        } else {
+            // ...otherwise copy over the stored number to the current matrix position.
+            tokenMatrix[random] = tokenMatrix[maxIndex - 1];
+        }
+
+        // Increment counts
+        super.nextToken();
+
+        return value + startFrom;
+    }
+}
+
+contract Dot is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, AccessControl, RandomlyAssigned {
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
@@ -79,6 +209,15 @@ contract Dot is ERC721, Pausable, ERC721URIStorage, AccessControl, RandomlyAssig
         return tokenCount();
     }
 
+    function totalSupply() 
+        public 
+        view
+        override(ERC721Enumerable, WithLimitedSupply)
+        returns (uint256)
+    {
+        return supply - totalSold();
+    }
+
     // admin only functions
 
     function setBaseUri(string memory uri) public onlyRole(DEFAULT_ADMIN_ROLE) {
@@ -122,14 +261,6 @@ contract Dot is ERC721, Pausable, ERC721URIStorage, AccessControl, RandomlyAssig
     }
 
     // need this for libraries
-    
-    function _beforeTokenTransfer(address from, address to, uint256 tokenId)
-        internal
-        whenNotPaused
-        override
-    {
-        super._beforeTokenTransfer(from, to, tokenId);
-    }
 
     function pause() public onlyRole(PAUSER_ROLE) {
         _pause();
@@ -137,6 +268,14 @@ contract Dot is ERC721, Pausable, ERC721URIStorage, AccessControl, RandomlyAssig
 
     function unpause() public onlyRole(PAUSER_ROLE) {
         _unpause();
+    }
+
+    function _beforeTokenTransfer(address from, address to, uint256 tokenId)
+        internal
+        whenNotPaused
+        override(ERC721, ERC721Enumerable)
+    {
+        super._beforeTokenTransfer(from, to, tokenId);
     }
 
     // The following functions are overrides required by Solidity.
@@ -157,7 +296,7 @@ contract Dot is ERC721, Pausable, ERC721URIStorage, AccessControl, RandomlyAssig
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(ERC721, AccessControl)
+        override(ERC721, ERC721Enumerable, AccessControl)
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
