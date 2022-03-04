@@ -6,7 +6,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test:contract": "npx hardhat test"
+    "hh:test": "npx hardhat test",
+    "hh:compile": "npx hardhat compile",
+    "hh:node": "npx hardhat node",
+    "hh:deploy": "npx hardhat run scripts/deploy.ts --network localhost"
   },
   "dependencies": {
     "@1001-digital/erc721-extensions": "^0.0.16",
