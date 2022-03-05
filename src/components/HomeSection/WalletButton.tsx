@@ -1,9 +1,10 @@
 import { FC, useEffect, useRef, useState } from "react";
-import styled, { useTheme } from 'styled-components';
+import styled from 'styled-components';
 import MetaMaskOnboarding from '@metamask/onboarding';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWallet, faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import { BigNumber, ethers } from 'ethers';
+import Link from 'next/link';
+import { ethers } from 'ethers';
 
 import { useAppSelector, useAppDispatch } from '../../state/hooks';
 import { selectWallet, setAddress, clearAddress } from '../../state/slices/wallet.state';
@@ -186,30 +187,6 @@ export const WalletButton: FC = () => {
         metaMask ? connectWallet() : installMetamask();
     }
 
-    const getMyDots = async () => {
-        try {
-            // @ts-ignore
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const signer = provider.getSigner();
-            const contract = new ethers.Contract(
-                process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
-                Dots.abi,
-                signer
-            );
-
-            const balance: BigNumber = await contract.balanceOf(await signer.getAddress());
-            const tokensIds: number[] = [];
-            for(let i = 0; i < balance.toNumber(); i++) {
-                const tokenId: BigNumber = await contract.tokenOfOwnerByIndex(signer.getAddress(), i);
-                tokensIds.push(tokenId.toNumber());
-            }
-            console.log({tokensIds});
-        } catch(err) {
-            console.error(err);
-            alert(`ERROR: Something went wrong.`);
-        }
-    }
-
     return (
         <Styled.Container>
             <Styled.WalletButton
@@ -223,7 +200,7 @@ export const WalletButton: FC = () => {
             </Styled.WalletButton>
             <Styled.Dropdown ref={dropdownRef} visible={showDropdown}>
                 <button onClick={disconnectWallet} style={{ color: 'red' }}>Disconnect</button>
-                { readyToMint && <button onClick={getMyDots}>My DOTS</button> }
+                { readyToMint && <Link href='/my-dots'><a>My DOTS</a></Link> }
             </Styled.Dropdown>
         </Styled.Container>
     )
