@@ -1,13 +1,14 @@
 import { ethers, BigNumber } from "ethers";
 import { FC, useEffect, useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner, faAnglesLeft } from '@fortawesome/free-solid-svg-icons';
+import { faAnglesLeft } from '@fortawesome/free-solid-svg-icons';
 import NextLink from "next/link";
-import { Row, Col } from 'react-bootstrap';
-import styled, { keyframes } from 'styled-components';
+import { Row, Col as RBCol } from 'react-bootstrap';
+import styled from 'styled-components';
 
 import Dots from '../artifacts/contracts/Dot.sol/Dot.json';
 import { Section } from "../components/Section";
+import { DotImage } from "../components/DotImage";
 
 namespace Styled {
     export const SectionContainer = styled(Section)`
@@ -44,51 +45,12 @@ namespace Styled {
         }
     `;
 
-    export const DotContainer = styled.div<{ isLoading?: boolean }>`
-        height: 100%;
-        border: ${({ isLoading }) => !isLoading && `1px solid lightgray`};
-        padding: ${({ isLoading }) => isLoading && `4rem`};
+    export const Col = styled(RBCol)`
         display: flex;
         justify-content: center;
         align-items: center;
-
-        img {
-            width: 100%;
-            height: 100%;
-        }
+        margin-bottom: 1.5rem;
     `;
-
-    const rotate = keyframes`
-        from { transform: rotate(0deg);   }
-        to   { transform: rotate(360deg); }
-    `;
-
-    export const Loader = styled(FontAwesomeIcon)`
-        animation: ${rotate} 1s linear;
-    `;
-}
-
-const DotImage: FC<{ nftId: number}> = ({ nftId }) => {
-    const [isLoading, setLoading] = useState<boolean>(true);
-
-    return (
-        <Col style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginBottom: '1.5rem',
-        }}>
-            <Styled.DotContainer key={nftId} isLoading={isLoading}>
-                {isLoading && <Styled.Loader size="2x" icon={faSpinner} />}
-                <div style={{ display: isLoading ? 'none' : 'block' }}>
-                    <img
-                        src={`${process.env.NEXT_PUBLIC_PNG_PATH}/${nftId}.png`}
-                        onLoad={() => setLoading(false)}
-                    />
-                </div>
-            </Styled.DotContainer>
-        </Col>
-    )
 }
 
 const MyDots: FC = () => {
@@ -136,7 +98,11 @@ const MyDots: FC = () => {
             </Styled.TitleBar>
             <div style={{ overflow: 'auto' }}>
                 <Row xs={1} sm={2} lg={3} style={{ width: '100%' }}>
-                    {nfts && nfts.map(nftId => <DotImage nftId={nftId} />)}
+                    {nfts && nfts.map(nftId => (
+                        <Styled.Col key={nftId}>
+                            <DotImage nftId={nftId} />
+                        </Styled.Col>
+                    ))}
                 </Row>
             </div>
         </Styled.SectionContainer>

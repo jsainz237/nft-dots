@@ -3,9 +3,12 @@ import Container from 'react-bootstrap/Container';
 import styled from 'styled-components';
 
 namespace Styled {
-    export const Section = styled.div`
+    export const Section = styled.div<{ splitBg?: boolean }>`
         width: 100%;
-        background-color: #0a0a0a;
+        background: ${({ splitBg }) => splitBg 
+            ? `linear-gradient(135deg, #0a0a0a 50%, #141414 50%)`
+            : '#0a0a0a'
+        };
         padding: 3rem;
     `;
 }
@@ -13,6 +16,7 @@ namespace Styled {
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
     sectionId: string;
     withContainer?: boolean;
+    splitBg?: boolean;
     containerProps?: React.HTMLAttributes<HTMLDivElement>;
 }
 
