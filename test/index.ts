@@ -22,6 +22,14 @@ describe("Dot Minting", function () {
       dots.connect(addr).payToMint(num, { value: ethers.utils.parseEther(ether.toString())});
   });
 
+  it('should transfer funds to owner upon minting', async () => {
+    let originalBalance: BigNumber = await owner.getBalance();
+    await mint(5, 5 * 0.005, addr1);
+    let newBalance: BigNumber = await owner.getBalance();
+
+    expect(newBalance.gt(originalBalance)).to.be.true;
+  })
+
   it("should mint correctly", async () => {
     let balance = await dots.balanceOf(addr1.getAddress());
     expect(balance).to.equal(0);

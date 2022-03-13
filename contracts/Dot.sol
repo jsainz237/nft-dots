@@ -179,6 +179,11 @@ contract Dot is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, AccessCont
         return tokenId;
     }
 
+    function transferToOwner(uint256 value) private {
+        (bool success, ) = payable(owner).call{value: value}("");
+        require(success);
+    }
+
     // custom functions
 
     function isDotOwned(uint id) public view returns (bool) {
@@ -196,6 +201,9 @@ contract Dot is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, AccessCont
         for(uint i = 0; i < numTokens; i++) {
             tokens[i] = mint(msg.sender);
         }
+
+        transferToOwner(msg.value);
+
         return tokens;
     }
 
