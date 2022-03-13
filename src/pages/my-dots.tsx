@@ -32,8 +32,9 @@ namespace Styled {
         align-items: center;
         margin-bottom: 1rem;
 
-        *:first-child {
-            margin-right: 0.5rem;
+        p {
+            margin: 0;
+            margin-top: 1rem;
         }
     `;
 
@@ -50,6 +51,12 @@ namespace Styled {
         justify-content: center;
         align-items: center;
         margin-bottom: 1.5rem;
+    `;
+
+    export const DotsContainer = styled.div`
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
     `;
 }
 
@@ -86,25 +93,31 @@ const MyDots: FC = () => {
     }
     
     return (
-        <Styled.SectionContainer sectionId="my-dots" style={{ overflow: 'auto' }} withContainer>
+        <Styled.SectionContainer
+            sectionId="my-dots"
+            withContainer
+            topSection
+            containerProps={{
+                style: {
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: '100%'
+                }
+            }}
+        >
             <Styled.TitleBar>
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <NextLink href="/">
-                        <Styled.Link><FontAwesomeIcon size="lg" icon={faAnglesLeft} /></Styled.Link>
-                    </NextLink>
-                    <h1 className='section-title'>My DOTs</h1>
-                </div>
-                <p style={{ margin: '0 1.5rem 0 0' }}>({ nfts?.length ?? 0 })</p>
+                <h1 className='section-title'>My DOTs</h1>
+                <p style={{ margin: 0 }}>({ nfts?.length ?? 0 })</p>
             </Styled.TitleBar>
-            <div>
-                <Row xs={1} sm={2} lg={3} style={{ width: '100%' }}>
+            <Styled.DotsContainer>
+                <Row xs={1} sm={2} lg={3}>
                     {nfts && nfts.map(nftId => (
                         <Styled.Col key={nftId}>
                             <DotImage nftId={nftId} link />
                         </Styled.Col>
                     ))}
                 </Row>
-            </div>
+            </Styled.DotsContainer>
         </Styled.SectionContainer>
     );
 }

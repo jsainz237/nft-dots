@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { NextPage, NextPageContext } from "next";
 import { Row, Col } from "react-bootstrap";
 import { FontAwesomeIcon as FAIcon} from '@fortawesome/react-fontawesome';
-import { faList, faUser, faInfo, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { faList, faUser, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { ethers } from 'ethers';
 
@@ -10,6 +10,9 @@ import { Section } from '../../components/Section';
 import { Metadata, properties, Rarity } from "../../utils/properties";
 import { DotImage } from "../../components/DotImage";
 import Dots from '../../artifacts/contracts/Dot.sol/Dot.json';
+import { useAppDispatch } from "../../state/hooks";
+import { setPrimaryOverride, clearPrimaryOverride } from '../../state/slices/theme.state';
+import { colors } from "../../styles/generate-theme";
 
 namespace Styled {
     export const FlexColumn = styled.div`
@@ -98,9 +101,21 @@ interface Props {
 
 const DotViewer: NextPage<Props> = ({ metadata }) => {
     const [owner, setOwner] = useState<string>();
+    const dispatch = useAppDispatch();
+
+    const primaryColorName = metadata.attributes
+        .find(({ trait_type }) => trait_type === 'color')
+        .value;
+        
+    const primaryColor = colors[primaryColorName];
 
     useEffect(() => {
         getOwner();
+        dispatch(setPrimaryOverride(primaryColor))
+
+        return () => {
+            dispatch(clearPrimaryOverride());
+        }
     }, []);
 
     const getOwner = async () => {
@@ -149,7 +164,7 @@ const DotViewer: NextPage<Props> = ({ metadata }) => {
                 <h5><span><FAIcon icon={faList} /></span> Properties</h5>
             </div>
             { metadata.attributes.map(({ trait_type, value }) => (
-                <div className="attribute-bar">
+                <div key={trait_type} className="attribute-bar">
                     <h6 className="trait">{trait_type ?? 'property'}</h6>
                     <h6 className="value">
                         {value.replace('-', '_')}
@@ -170,6 +185,7 @@ const DotViewer: NextPage<Props> = ({ metadata }) => {
             sectionId="dot-viewer" 
             withContainer
             splitBg
+            topSection
             style={{ minHeight: '100vh' }}
         >
             <Row>

@@ -1,9 +1,6 @@
 import styled from 'styled-components';
 import { Section } from '../Section';
 
-/** @ts-ignore */
-import DotPlus from '../../../public/assets/plus.svg';
-
 export namespace Styled {
     export const SectionContainer = styled(Section)`
         position: relative;
@@ -23,6 +20,7 @@ export namespace Styled {
             justify-content: center;
             align-items: flex-end;
             margin-bottom: 8rem;
+            margin-top: 7rem;
         `;
 
         export const Dot = styled.div<{ legendary?: boolean }>`
@@ -77,6 +75,8 @@ export namespace Styled {
         width: 200vw;
         mix-blend-mode: difference;
         background-color: ${props => props.theme.s0};
+        background-blend-mode: difference;
+        z-index: 100;
         background: ${({ legendary, theme }) => {
             const stop = 50;
             return legendary ? theme.s0 : `linear-gradient(
@@ -88,58 +88,6 @@ export namespace Styled {
             )`
         }};
     `;
-
-    export namespace Header {
-        export const Wrapper = styled.div`
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-
-            @media screen and (max-width: 720px) {
-                justify-content: flex-end;
-            }
-        `;
-
-        export const Nav = styled.header`
-            display: flex;
-            align-items: center;
-
-            @media screen and (max-width: 720px) {
-                display: none;
-            }
-
-            *:not(:last-child) {
-                margin-right: 2rem;
-            }
-        `;
-
-        export const Link = styled.a`
-            font-size: 18px;
-            color: ${props => props.theme.s0};
-            margin: 0;
-            cursor: pointer;
-
-            &:hover {
-                color: ${props => props.theme.s0};
-                opacity: 0.5;
-            }
-        `;
-
-        export const HomeIcon = styled(DotPlus)`
-            height: 18px;
-            width: 18px;
-            color: ${props => props.theme.s0};
-
-            &:hover {
-                opacity: 0.5;
-            }
-        `;
-
-        export const NavMenu = styled.button`
-            border: none;
-            background: none;
-        `;
-    }
 
     export namespace Minting {
         export const ActionWrapper = styled.div`

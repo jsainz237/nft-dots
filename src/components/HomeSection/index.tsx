@@ -5,10 +5,11 @@ import { faPlusCircle, faMinusCircle } from '@fortawesome/free-solid-svg-icons';
 import { ethers } from 'ethers';
 
 import { selectWallet } from '../../state/slices/wallet.state';
-import { WalletButton } from "./WalletButton";
+import { WalletButton } from "../Header/WalletButton";
 import { Styled } from './styles';
 import { useAppSelector } from "../../state/hooks";
 import Dots from '../../artifacts/contracts/Dot.sol/Dot.json';
+import { Header } from "../Header";
 
 const MINT_LIMIT = 10, MINT_MIN = 1;
 
@@ -97,19 +98,6 @@ export const HomeSection: FC = () => {
         }
     }
 
-    const renderHeader = () => (
-        <Styled.Header.Wrapper>
-            <Styled.Header.Nav>
-                <a href="#mint"><Styled.Header.HomeIcon /></a>
-                <Styled.Header.Link href="#info">Info</Styled.Header.Link>
-                <Styled.Header.Link href="#preview">Preview</Styled.Header.Link>
-                <Styled.Header.Link href="#invest">Invest</Styled.Header.Link>
-                <Styled.Header.Link href="#faq">FAQ</Styled.Header.Link>
-            </Styled.Header.Nav>
-            <WalletButton/>
-        </Styled.Header.Wrapper>
-    );
-
     const renderTitle = () => (
         <Styled.Title.Wrapper>
             <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -155,8 +143,7 @@ export const HomeSection: FC = () => {
     )
 
     return (
-        <Styled.SectionContainer sectionId="mint" style={{ paddingTop: '1.25rem' }}>
-            {renderHeader()}
+        <Styled.SectionContainer sectionId="mint" style={{ paddingTop: '1.25rem' }} topSection>
             {renderTitle()}
             {renderMinting()}
         </Styled.SectionContainer>

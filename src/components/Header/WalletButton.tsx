@@ -8,7 +8,6 @@ import { ethers } from 'ethers';
 
 import { useAppSelector, useAppDispatch } from '../../state/hooks';
 import { selectWallet, setAddress, clearAddress } from '../../state/slices/wallet.state';
-import Dots from '../../artifacts/contracts/Dot.sol/Dot.json';
 
 namespace Styled {
     export const Container = styled.div`
@@ -16,8 +15,8 @@ namespace Styled {
     `;
 
     export const WalletButton = styled.button`
-        border: 2px solid ${props => props.theme.s0};
-        color: ${props => props.theme.s0};
+        border: 2px solid ${props => props.theme.primaryColorOverride ?? props.theme.s0};
+        color: ${props => props.theme.primaryColorOverride ?? props.theme.s0};
         font-size: 1rem;
         padding: 0.25rem 1rem;
         display: flex;
@@ -29,7 +28,7 @@ namespace Styled {
         transition: all 0.2s ease;
 
         &:hover:not(:disabled) {
-            background: ${props => props.theme.s0};
+            background: ${props => props.theme.primaryColorOverride ?? props.theme.s0};
             color: black;
         }
 
