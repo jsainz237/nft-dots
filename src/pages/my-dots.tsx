@@ -96,11 +96,11 @@ const MyDots: FC = () => {
                 </div>
                 <p style={{ margin: '0 1.5rem 0 0' }}>({ nfts?.length ?? 0 })</p>
             </Styled.TitleBar>
-            <div style={{ overflow: 'auto' }}>
+            <div>
                 <Row xs={1} sm={2} lg={3} style={{ width: '100%' }}>
                     {nfts && nfts.map(nftId => (
                         <Styled.Col key={nftId}>
-                            <DotImage nftId={nftId} />
+                            <DotImage nftId={nftId} link />
                         </Styled.Col>
                     ))}
                 </Row>

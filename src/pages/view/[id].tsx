@@ -173,10 +173,10 @@ const DotViewer: NextPage<Props> = ({ metadata }) => {
             style={{ minHeight: '100vh' }}
         >
             <Row>
-                <Styled.ImageWrapper xs={12} lg={6}>
+                <Styled.ImageWrapper xs={12} md={6}>
                     <DotImage nftId={metadata.id} />
                 </Styled.ImageWrapper>
-                <Styled.RightContainer xs={12} lg={6}>
+                <Styled.RightContainer xs={12} md={6}>
                     { renderDetails() }
                     { renderProperties() }
                 </Styled.RightContainer>
