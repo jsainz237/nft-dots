@@ -115,7 +115,7 @@ export const WalletButton: FC = () => {
     };
 
     const installMetamask = () => {
-        const onboarding = new MetaMaskOnboarding({ forwarderOrigin: process.env.CALLBACK_URL });
+        const onboarding = new MetaMaskOnboarding({ forwarderOrigin: process.env.NEXT_PUBLIC_CALLBACK_URL });
         setIsOnboarding(true);
         onboarding.startOnboarding();
     }
