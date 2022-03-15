@@ -79,7 +79,7 @@ export const WalletButton: FC = () => {
     const walletAddress = useAppSelector(selectWallet);
     const [metaMask, setMetaMask] = useState<boolean>();
     const [isOnboarding, setIsOnboarding] = useState<boolean>();
-    const [connectedToBSC, setConnectedToBSC] = useState<boolean>();
+    const [connectedToNetwork, setConnected] = useState<boolean>();
 
     const dispatch = useAppDispatch();
 
@@ -143,11 +143,13 @@ export const WalletButton: FC = () => {
             // @ts-ignore
             const provider = new ethers.providers.Web3Provider(window.ethereum);            
             const connectedNetwork = await provider.getNetwork();
-            if(connectedNetwork.chainId !== 56) {
-                setConnectedToBSC(!!process.env.NEXT_PUBLIC_IS_TESTING);
+            const chainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID);
+
+            if(connectedNetwork.chainId !== chainId) {
+                setConnected(!!process.env.NEXT_PUBLIC_IS_TESTING);
                 return;
             } else {
-                setConnectedToBSC(true);
+                setConnected(true);
             }
 
             const signer = provider.getSigner();
@@ -168,8 +170,8 @@ export const WalletButton: FC = () => {
     const renderMessage = () => {
         return walletAddress
             ? `0x...${walletAddress.slice(-4)}`
-            : metaMask && !connectedToBSC
-            ? 'Connect to BSC'
+            : metaMask && !connectedToNetwork
+            ? `Connect to ${process.env.NEXT_PUBLIC_NETWORK_NAME}`
             : isOnboarding
             ? 'Install in progress'
             : metaMask && !walletAddress
@@ -190,7 +192,7 @@ export const WalletButton: FC = () => {
         <Styled.Container>
             <Styled.WalletButton
                 ref={walletButtonRef}
-                disabled={isOnboarding}
+                disabled={isOnboarding || !connectedToNetwork}
                 onClick={onClick}
             >
                 {walletAddress && <FontAwesomeIcon style={{ marginRight: 12 }} icon={faWallet} />}
