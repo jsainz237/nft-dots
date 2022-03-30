@@ -179,8 +179,8 @@ contract Dot is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, AccessCont
         return tokenId;
     }
 
-    function transferToOwner(uint256 value) private {
-        (bool success, ) = payable(owner).call{value: value}("");
+    function transfer(address addr, uint256 value) private {
+        (bool success, ) = payable(addr).call{value: value}("");
         require(success);
     }
 
@@ -201,8 +201,6 @@ contract Dot is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, AccessCont
         for(uint i = 0; i < numTokens; i++) {
             tokens[i] = mint(msg.sender);
         }
-
-        transferToOwner(msg.value);
 
         return tokens;
     }
@@ -226,7 +224,16 @@ contract Dot is ERC721, ERC721Enumerable, ERC721URIStorage, Pausable, AccessCont
         return supply - totalSold();
     }
 
+    function getContractBalance() public view returns (uint) {
+        return address(this).balance;
+    }
+
     // admin only functions
+
+    function withdraw() public onlyRole(DEFAULT_ADMIN_ROLE) {
+        uint256 contractBalance = address(this).balance;
+        transfer(msg.sender, contractBalance);
+    }
 
     function setBaseUri(string memory uri) public onlyRole(DEFAULT_ADMIN_ROLE) {
         baseUri = uri;
