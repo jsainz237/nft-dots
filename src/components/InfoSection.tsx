@@ -68,7 +68,7 @@ export const InfoSection: FC = () => {
         'Each DOTs combination is randomly generated',
         '6 different properties',
         '5 different rarity values',
-        `Only ${process.env.NEXT_PUBLIC_PRICE_IN_BNB} BNB per DOT`,
+        `Only ${process.env.NEXT_PUBLIC_COST} BNB per DOT`,
     ]
 
     return (
